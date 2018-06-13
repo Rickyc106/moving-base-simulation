@@ -37,60 +37,6 @@ void draw() {
   strokeWeight(1);
   stroke(255,0,0);
   
-  /*
-  
-  if (keyPressed) {
-    if (key == 'e') {
-      steer_x = steer_mag * cos(radians(steer_angle));
-      steer_y = steer_mag * sin(radians(steer_angle));
-      steer_angle += 1;
-      steer_angle = steer_angle % 360;
-    }
-    else if (key == 'q') {
-      steer_x = steer_mag * cos(radians(steer_angle));
-      steer_y = steer_mag * sin(radians(steer_angle));
-      steer_angle -= 1;
-      steer_angle = steer_angle % 360;
-    }
-  }
-  
-  if (keyPressed) {
-    if (key == 'w' || key == 'W') {
-      trans_y -= speed;
-      for (int i = 0; i < 4; i ++){
-        points[i][1] += trans_y;
-        lines[i][1] += trans_y;
-      }
-      println('w');
-    }
-    else if (key == 's' || key == 'S') {
-      trans_y += speed;
-      for (int i = 0; i < 4; i ++){
-        points[i][1] += trans_y;
-        lines[i][1] += trans_y;
-      }
-      println('s');
-    }
-    else if (key == 'a' || key == 'A') {
-      trans_x -= speed;
-      for (int i = 0; i < 4; i ++){
-        points[i][0] += trans_x;
-        lines[i][0] += trans_x;
-      }
-      println('a');
-    }
-    else if (key == 'd' || key == 'D') {
-      trans_x += speed;
-      for (int i = 0; i < 4; i ++){
-        points[i][0] += trans_x;
-        lines[i][0] += trans_x;
-      }
-      println('d');
-    }
-  }
-  
-  */
-  
   for (int i = 0; i < keys.length; i++) {
     if (keys[i]) {
       switch (i) {
@@ -98,6 +44,7 @@ void draw() {
                  steer_y = steer_mag * sin(radians(steer_angle));
                  steer_angle -= 1;
                  steer_angle = steer_angle % 360;
+                 break;
         
         case 1:  trans_y -= speed;
                  for (int j = 0; j < 4; j ++) {
@@ -105,11 +52,13 @@ void draw() {
                    lines[j][1] += trans_y;
                  }
                  println('w');
+                 break;
         
         case 2:  steer_x = steer_mag * cos(radians(steer_angle));
                  steer_y = steer_mag * sin(radians(steer_angle));
                  steer_angle += 1;
                  steer_angle = steer_angle % 360;
+                 break;
         
         case 3:  trans_x -= speed;
                  for (int j = 0; j < 4; j ++) {
@@ -117,6 +66,7 @@ void draw() {
                    lines[j][0] += trans_x;
                  }
                  println('a');
+                 break;
         
         case 4:  trans_y += speed;
                  for (int j = 0; j < 4; j ++){
@@ -124,6 +74,7 @@ void draw() {
                    lines[j][1] += trans_y;
                  }
                  println('s');
+                 break;
         
         case 5:  trans_x += speed;
                  for (int j = 0; j < 4; j ++){
@@ -131,6 +82,7 @@ void draw() {
                    lines[j][0] += trans_x;
                  }
                  println('d');
+                 break;
       }
     }
   }
