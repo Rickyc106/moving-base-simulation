@@ -4,7 +4,7 @@
 int sm = 100;
 int la = 300;
 
-float steer_angle = 90;
+float steer_angle = 270;
 float steer_mag = 30;
 
 float[][] points = {  {sm, sm},    // Top left
@@ -19,14 +19,16 @@ float[][] lines = {  {sm, sm, sm, sm - steer_mag},    // Top Left
 
 float speed = 0.5;
 
+float steer_x = 0;
+float steer_y = 0;
+
+boolean keys[] = new boolean [6];
+
 void setup() {
   size(400,400);
 }
 
 void draw() {
-  float steer_x = 0;
-  float steer_y = 0;
-  
   float trans_x = 0; 
   float trans_y = 0;
   
@@ -35,16 +37,20 @@ void draw() {
   strokeWeight(1);
   stroke(255,0,0);
   
+  /*
+  
   if (keyPressed) {
     if (key == 'e') {
       steer_x = steer_mag * cos(radians(steer_angle));
       steer_y = steer_mag * sin(radians(steer_angle));
       steer_angle += 1;
+      steer_angle = steer_angle % 360;
     }
     else if (key == 'q') {
       steer_x = steer_mag * cos(radians(steer_angle));
       steer_y = steer_mag * sin(radians(steer_angle));
       steer_angle -= 1;
+      steer_angle = steer_angle % 360;
     }
   }
   
@@ -83,9 +89,64 @@ void draw() {
     }
   }
   
-  for (int i = 0; i < 4; i++){
-    lines[i][2] -= steer_x;
-    lines[i][3] -= steer_y;
+  */
+  
+  for (int i = 0; i < keys.length; i++) {
+    if (keys[i]) {
+      switch (i) {
+        case 0:  steer_x = steer_mag * cos(radians(steer_angle));
+                 steer_y = steer_mag * sin(radians(steer_angle));
+                 steer_angle -= 1;
+                 steer_angle = steer_angle % 360;
+        
+        case 1:  trans_y -= speed;
+                 for (int j = 0; j < 4; j ++) {
+                   points[j][1] += trans_y;
+                   lines[j][1] += trans_y;
+                 }
+                 println('w');
+        
+        case 2:  steer_x = steer_mag * cos(radians(steer_angle));
+                 steer_y = steer_mag * sin(radians(steer_angle));
+                 steer_angle += 1;
+                 steer_angle = steer_angle % 360;
+        
+        case 3:  trans_x -= speed;
+                 for (int j = 0; j < 4; j ++) {
+                   points[j][0] += trans_x;
+                   lines[j][0] += trans_x;
+                 }
+                 println('a');
+        
+        case 4:  trans_y += speed;
+                 for (int j = 0; j < 4; j ++){
+                   points[j][1] += trans_y;
+                   lines[j][1] += trans_y;
+                 }
+                 println('s');
+        
+        case 5:  trans_x += speed;
+                 for (int j = 0; j < 4; j ++){
+                   points[j][0] += trans_x;
+                   lines[j][0] += trans_x;
+                 }
+                 println('d');
+      }
+    }
+  }
+  
+  
+  if (steer_x == 0 && steer_y == 0) {
+    for (int i = 0; i < 4; i++) {
+      lines[i][2] = lines[i][0];
+      lines[i][3] = lines[i][1] - steer_mag;
+    }
+  }
+  else {
+    for (int i = 0; i < 4; i++) {
+      lines[i][2] = lines[i][0] + steer_x;
+      lines[i][3] = lines[i][1] + steer_y;
+    }
   }
   
   for (int i = 0; i < 4; i++){
@@ -98,4 +159,22 @@ void draw() {
   for (int i = 0; i < 4; i++){
     point(points[i][0], points[i][1]);
   }
+}
+
+void keyPressed() {
+  if (key == 'q') keys[0] = true;
+  if (key == 'w') keys[1] = true;
+  if (key == 'e') keys[2] = true;
+  if (key == 'a') keys[3] = true;
+  if (key == 's') keys[4] = true;
+  if (key == 'd') keys[5] = true;
+}
+
+void keyReleased() {
+  if (key == 'q') keys[0] = false;
+  if (key == 'w') keys[1] = false;
+  if (key == 'e') keys[2] = false;
+  if (key == 'a') keys[3] = false;
+  if (key == 's') keys[4] = false;
+  if (key == 'd') keys[5] = false;
 }
