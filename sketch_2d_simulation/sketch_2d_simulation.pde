@@ -5,7 +5,8 @@ int sm = 100;
 int la = 300;
 
 float[] center = {(sm + la) / 2, (sm + la) / 2};
-float points_angle[] = new float [4];
+float points_angle[] = {225, 315, 135, 45};
+float half_dia = sqrt(sq(la - center[0]) + sq(la - center[1]));
 
 float steer_angle = 270;
 float steer_mag = 30;
@@ -48,8 +49,8 @@ void draw() {
                  steer_angle -= 1;
                  steer_angle = steer_angle % 360;
                  
-                 for (int j = 0; j < 4; j++) {
-                   points_angle[j] = (degrees(atan2(abs(points[j][1] - center[1]), abs(points[j][0] - center[0]))) + 90*(j + 1) + 90) % 360;
+                 for (int j =0; j < 4; j++) {
+                   points_angle[j] -= 1;
                  }
                  break;
         
@@ -67,16 +68,14 @@ void draw() {
                  steer_angle += 1;
                  steer_angle = steer_angle % 360;
                  
-                 for (int j = 0; j < 4; j++) {
-                   points_angle[j] = (degrees(atan2(abs(points[j][1] - center[1]), abs(points[j][0] - center[0]))) + 90*(j + 1) + 90) % 360;
+                 for (int j =0; j < 4; j++) {
+                   points_angle[j] += 1;
                  }
                  break;
         
         case 3:  trans_x -= speed;
                  for (int j = 0; j < 4; j ++) {
                    center[0] += trans_x; 
-                   points[j][0] += trans_x;
-                   lines[j][0] += trans_x;
                  }
                  println('a');
                  break;
@@ -84,8 +83,6 @@ void draw() {
         case 4:  trans_y += speed;
                  for (int j = 0; j < 4; j ++){
                    center[1] += trans_y; 
-                   points[j][1] += trans_y;
-                   lines[j][1] += trans_y;
                  }
                  println('s');
                  break;
@@ -93,16 +90,24 @@ void draw() {
         case 5:  trans_x += speed;
                  for (int j = 0; j < 4; j ++){
                    center[0] += trans_x; 
-                   points[j][0] += trans_x;
-                   lines[j][0] += trans_x;
                  }
                  println('d');
                  break;
       }
+      
+      for (int j = 0; j < 4; j++) {
+        points_angle[j] = points_angle[j] % 360;
+       
+        points[j][0] = half_dia * cos(radians(points_angle[j])) + center[0];
+        points[j][1] = half_dia * sin(radians(points_angle[j])) + center[1];
+       
+        lines[j][0] = half_dia * cos(radians(points_angle[j])) + center[0];
+        lines[j][1] = half_dia * sin(radians(points_angle[j])) + center[1];
+      }
     }
   }
   
-  println(points_angle[1]);
+  println(center[0]);
   
   
   if (steer_x == 0 && steer_y == 0) {
