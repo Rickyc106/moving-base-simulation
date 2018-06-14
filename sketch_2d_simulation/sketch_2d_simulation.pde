@@ -154,12 +154,32 @@ void draw() {
         rotate_lines[j][1] = points[j][1];
         
         if (ccw) {
-          rotate_lines[j][2] = rotate_lines[j][0] - trans_mag * cos(radians(rotate_angle[j]));
-          rotate_lines[j][3] = rotate_lines[j][1] - trans_mag * sin(radians(rotate_angle[j])); 
+          if (j == 1 || j == 3) {
+            rotate_lines[j][2] = rotate_lines[j][0] - trans_mag * cos(radians(rotate_angle[j]));    // Original
+            rotate_lines[j][3] = rotate_lines[j][1] - trans_mag * sin(radians(rotate_angle[j]));
+          }
+          else if (j == 0) {
+            rotate_lines[j][2] = rotate_lines[j][0] + trans_mag * cos(radians(rotate_angle[j]));
+            rotate_lines[j][3] = rotate_lines[j][1] + trans_mag * sin(radians(rotate_angle[j]));
+          }
+          else if (j == 2) {
+            rotate_lines[j][2] = rotate_lines[j][0] + trans_mag * cos(radians(rotate_angle[j]));
+            rotate_lines[j][3] = rotate_lines[j][1] - trans_mag * sin(radians(rotate_angle[j]));
+          }
         }
         else {
-          rotate_lines[j][2] = rotate_lines[j][0] + trans_mag * cos(radians(rotate_angle[j]));
-          rotate_lines[j][3] = rotate_lines[j][1] + trans_mag * sin(radians(rotate_angle[j]));
+          if (j == 1 || j == 3) {
+            rotate_lines[j][2] = rotate_lines[j][0] + trans_mag * cos(radians(rotate_angle[j]));    // Original
+            rotate_lines[j][3] = rotate_lines[j][1] + trans_mag * sin(radians(rotate_angle[j]));
+          }
+          else if (j == 0) {
+            rotate_lines[j][2] = rotate_lines[j][0] - trans_mag * cos(radians(rotate_angle[j]));
+            rotate_lines[j][3] = rotate_lines[j][1] - trans_mag * sin(radians(rotate_angle[j]));
+          }
+          else if (j == 2) {
+            rotate_lines[j][2] = rotate_lines[j][0] - trans_mag * cos(radians(rotate_angle[j]));
+            rotate_lines[j][3] = rotate_lines[j][1] + trans_mag * sin(radians(rotate_angle[j]));
+          }
         }
       }
     }
