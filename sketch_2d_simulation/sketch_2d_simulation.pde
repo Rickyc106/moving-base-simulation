@@ -8,8 +8,11 @@ float[] center = {(sm + la) / 2, (sm + la) / 2};
 float points_angle[] = {225, 315, 135, 45};
 float half_dia = sqrt(sq(la - center[0]) + sq(la - center[1]));
 
+float trans_angle;
+
 float steer_angle = 270;
 float steer_mag = 30;
+float trans_mag = 50;
 
 float[][] points = {  {sm, sm},    // Top left
                       {la, sm},    // Top Right
@@ -20,6 +23,11 @@ float[][] lines = {  {sm, sm, sm, sm - steer_mag},    // Top Left
                      {la, sm, la, sm - steer_mag},    // Top Right
                      {sm, la, sm, la - steer_mag},    // Bot Left
                      {la, la, la, la - steer_mag}  };    // Bot Right
+                     
+float[][] trans_lines = {  {sm, sm, sm, sm},
+                           {la, sm, la, sm},
+                           {sm, la, sm, la},
+                           {la, la, la, la}  };
 
 float speed = 0.5;
 
@@ -35,6 +43,8 @@ void setup() {
 void draw() {
   float trans_x = 0; 
   float trans_y = 0;
+  
+  
   
   background(255);
   
@@ -55,10 +65,14 @@ void draw() {
                  break;
         
         case 1:  trans_y -= speed;
+        
+                 if (keys[3]) trans_angle = 225;
+                 else if (keys[5]) trans_angle = 315;
+                 else trans_angle = 270;
+        
+                 trans_angle = 270;
                  for (int j = 0; j < 4; j ++) {
-                   center[1] += trans_y; 
-                   points[j][1] += trans_y;
-                   lines[j][1] += trans_y;
+                   center[1] += trans_y;
                  }
                  println('w');
                  break;
@@ -74,22 +88,38 @@ void draw() {
                  break;
         
         case 3:  trans_x -= speed;
+                 
+                 if (keys[1]) trans_angle = 225;
+                 else if (keys[4]) trans_angle = 135;
+                 else trans_angle = 180;
+                 
                  for (int j = 0; j < 4; j ++) {
-                   center[0] += trans_x; 
+                   center[0] += trans_x;
                  }
                  println('a');
                  break;
         
         case 4:  trans_y += speed;
+                 
+                 if (keys[3]) trans_angle = 135;
+                 else if (keys[5]) trans_angle = 45;
+                 else trans_angle = 90;
+        
                  for (int j = 0; j < 4; j ++){
-                   center[1] += trans_y; 
+                   center[1] += trans_y;
+                   trans_lines[j][3] = trans_lines[j][1] + trans_mag;
                  }
                  println('s');
                  break;
         
         case 5:  trans_x += speed;
+        
+                 if (keys[1]) trans_angle = 315;
+                 else if (keys[4]) trans_angle = 45;
+                 else trans_angle = 0;
+        
                  for (int j = 0; j < 4; j ++){
-                   center[0] += trans_x; 
+                   center[0] += trans_x;
                  }
                  println('d');
                  break;
@@ -101,8 +131,13 @@ void draw() {
         points[j][0] = half_dia * cos(radians(points_angle[j])) + center[0];
         points[j][1] = half_dia * sin(radians(points_angle[j])) + center[1];
        
-        lines[j][0] = half_dia * cos(radians(points_angle[j])) + center[0];
-        lines[j][1] = half_dia * sin(radians(points_angle[j])) + center[1];
+        lines[j][0] = points[j][0];
+        lines[j][1] = points[j][1];
+        
+        trans_lines[j][0] = half_dia * cos(radians(points_angle[j])) + center[0];
+        trans_lines[j][1] = half_dia * sin(radians(points_angle[j])) + center[1];
+        trans_lines[j][2] = trans_lines[j][0] + trans_mag * cos(radians(trans_angle));
+        trans_lines[j][3] = trans_lines[j][1] + trans_mag * sin(radians(trans_angle));
       }
     }
   }
@@ -125,6 +160,11 @@ void draw() {
   
   for (int i = 0; i < 4; i++){
     line(lines[i][0], lines[i][1], lines[i][2], lines[i][3]);
+  }
+  
+  stroke(0,0,255);
+  for (int i = 0; i < 4; i++){
+    line(trans_lines[i][0], trans_lines[i][1], trans_lines[i][2], trans_lines[i][3]);
   }
   
   for (int i = 0; i < 4; i++){
