@@ -6,6 +6,7 @@ int la = 300;
 
 float[] center = {(sm + la) / 2, (sm + la) / 2};
 float points_angle[] = {225, 315, 135, 45};
+float[] rotate_angle = {135, 45, 315, 135};
 float half_dia = sqrt(sq(la - center[0]) + sq(la - center[1]));
 
 float trans_angle;
@@ -28,6 +29,8 @@ float[][] trans_lines = {  {sm, sm, sm, sm},
                            {la, sm, la, sm},
                            {sm, la, sm, la},
                            {la, la, la, la}  };
+                           
+float[][] rotate_lines = new float[4][4];
 
 float speed = 0.5;
 
@@ -35,6 +38,7 @@ float steer_x = 0;
 float steer_y = 0;
 
 boolean keys[] = new boolean [6];
+boolean ccw = true;
 
 void setup() {
   size(400,400);
@@ -56,12 +60,16 @@ void draw() {
       switch (i) {
         case 0:  steer_x = steer_mag * cos(radians(steer_angle));
                  steer_y = steer_mag * sin(radians(steer_angle));
+                 
                  steer_angle -= 1;
                  steer_angle = steer_angle % 360;
                  
                  for (int j =0; j < 4; j++) {
                    points_angle[j] -= 1;
+                   rotate_angle[j] -= 1;
                  }
+                 
+                 ccw = true;
                  break;
         
         case 1:  trans_y -= speed;
@@ -69,8 +77,7 @@ void draw() {
                  if (keys[3]) trans_angle = 225;
                  else if (keys[5]) trans_angle = 315;
                  else trans_angle = 270;
-        
-                 trans_angle = 270;
+                 
                  for (int j = 0; j < 4; j ++) {
                    center[1] += trans_y;
                  }
@@ -79,12 +86,16 @@ void draw() {
         
         case 2:  steer_x = steer_mag * cos(radians(steer_angle));
                  steer_y = steer_mag * sin(radians(steer_angle));
+                 
                  steer_angle += 1;
                  steer_angle = steer_angle % 360;
                  
                  for (int j =0; j < 4; j++) {
                    points_angle[j] += 1;
+                   rotate_angle[j] += 1;
                  }
+                 
+                 ccw = false;
                  break;
         
         case 3:  trans_x -= speed;
@@ -138,12 +149,27 @@ void draw() {
         trans_lines[j][1] = half_dia * sin(radians(points_angle[j])) + center[1];
         trans_lines[j][2] = trans_lines[j][0] + trans_mag * cos(radians(trans_angle));
         trans_lines[j][3] = trans_lines[j][1] + trans_mag * sin(radians(trans_angle));
+        
+        rotate_lines[j][0] = points[j][0];
+        rotate_lines[j][1] = points[j][1];
+        
+        if (ccw) {
+          rotate_lines[j][2] = rotate_lines[j][0] - trans_mag * cos(radians(rotate_angle[j]));
+          rotate_lines[j][3] = rotate_lines[j][1] - trans_mag * sin(radians(rotate_angle[j])); 
+        }
+        else {
+          rotate_lines[j][2] = rotate_lines[j][0] + trans_mag * cos(radians(rotate_angle[j]));
+          rotate_lines[j][3] = rotate_lines[j][1] + trans_mag * sin(radians(rotate_angle[j]));
+        }
       }
     }
   }
   
-  println(center[0]);
-  
+  print(rotate_angle[0] + " ");
+  print(rotate_lines[0][0] + " ");
+  print(rotate_lines[0][1] + " ");
+  print(rotate_lines[0][2] + " ");
+  println(rotate_lines[0][3]);
   
   if (steer_x == 0 && steer_y == 0) {
     for (int i = 0; i < 4; i++) {
@@ -159,12 +185,17 @@ void draw() {
   }
   
   for (int i = 0; i < 4; i++){
-    line(lines[i][0], lines[i][1], lines[i][2], lines[i][3]);
+    //line(lines[i][0], lines[i][1], lines[i][2], lines[i][3]);
   }
   
   stroke(0,0,255);
   for (int i = 0; i < 4; i++){
     line(trans_lines[i][0], trans_lines[i][1], trans_lines[i][2], trans_lines[i][3]);
+  }
+  
+  stroke(15,140,27);
+  for (int i = 0; i < 4; i++) {
+    line(rotate_lines[i][0], rotate_lines[i][1], rotate_lines[i][2], rotate_lines[i][3]);
   }
   
   for (int i = 0; i < 4; i++){
