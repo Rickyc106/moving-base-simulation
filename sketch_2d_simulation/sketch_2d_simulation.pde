@@ -7,6 +7,8 @@ int la = 300;
 float[] center = {(sm + la) / 2, (sm + la) / 2};
 float points_angle[] = {225, 315, 135, 45};
 float[] rotate_angle = {135, 45, 45, 135};
+float[] res_angle = new float[4];
+
 float half_dia = sqrt(sq(la - center[0]) + sq(la - center[1]));
 
 float trans_angle;
@@ -30,6 +32,7 @@ float[][] trans_lines = {  {sm, sm, sm, sm},
                            {sm, la, sm, la},
                            {la, la, la, la}  };
                            
+float[][] res_lines = new float[4][4];
 float[][] rotate_lines = new float[4][4];
 
 float speed = 0.5;
@@ -173,15 +176,26 @@ void draw() {
             rotate_lines[j][3] = rotate_lines[j][1] - trans_mag * sin(radians(rotate_angle[j]));
           }
         }
+        
+        res_lines[j][0] = points[j][0];
+        res_lines[j][1] = points[j][1];
+        
+        res_lines[j][2] = (trans_lines[j][2] - trans_lines[j][0]) + (rotate_lines[j][2] - rotate_lines[j][0]) + res_lines[j][0];
+        res_lines[j][3] = (trans_lines[j][3] - trans_lines[j][1]) + (rotate_lines[j][3] - rotate_lines[j][1]) + res_lines[j][1];
       }
     }
   }
   
-  print(rotate_angle[0] + rotate_angle[2] + " ");
-  print(rotate_lines[0][0] + " ");
-  print(rotate_lines[0][1] + " ");
-  print(rotate_lines[0][2] + " ");
-  println(rotate_lines[0][3]);
+  //print(rotate_angle[0] + rotate_angle[2] + " ");
+  //print(rotate_lines[0][0] + " ");
+  //print(rotate_lines[0][1] + " ");
+  //print(rotate_lines[0][2] + " ");
+  //println(rotate_lines[0][3]);
+  
+  print(res_lines[0][0] + " ");
+  print(res_lines[0][1] + " ");
+  print(res_lines[0][2] + " ");
+  println(res_lines[0][3]);
   
   if (steer_x == 0 && steer_y == 0) {
     for (int i = 0; i < 4; i++) {
@@ -208,6 +222,11 @@ void draw() {
   stroke(15,140,27);
   for (int i = 0; i < 4; i++) {
     line(rotate_lines[i][0], rotate_lines[i][1], rotate_lines[i][2], rotate_lines[i][3]);
+  }
+  
+  stroke(131,27,58);
+  for (int i = 0; i < 4; i++) {
+    line(res_lines[i][0], res_lines[i][1], res_lines[i][2], res_lines[i][3]);
   }
   
   for (int i = 0; i < 4; i++){
