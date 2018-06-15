@@ -1,5 +1,7 @@
-// ** TO-DO: FIX KEYBOARD LAG
-// ** TO-DO: MULTIPLE KEYBOARD INPUT
+// ** TO-DO: FIX POOR PROGRAMMING
+// ** Currently drawing lines, then erasing. Should check then draw
+
+// ** TO-DO: CENTER-MAP BUTTON A LITTLE BUGGY
 
 int sm = 100;
 int la = 300;
@@ -35,13 +37,15 @@ float[][] trans_lines = {  {sm, sm, sm, sm},
 float[][] res_lines = new float[4][4];
 float[][] rotate_lines = new float[4][4];
 
-float speed = 0.5;
+float speed = 1.0;
 
 float steer_x = 0;
 float steer_y = 0;
 
-boolean keys[] = new boolean [6];
+boolean keys[] = new boolean [7];
 boolean ccw = true;
+
+boolean centered = false;
 
 void setup() {
   size(400,400);
@@ -81,7 +85,7 @@ void draw() {
                  else if (keys[5]) trans_angle = 315;
                  else trans_angle = 270;
                  
-                 for (int j = 0; j < 4; j ++) {
+                 if (!centered) {
                    center[1] += trans_y;
                  }
                  println('w');
@@ -107,7 +111,7 @@ void draw() {
                  else if (keys[4]) trans_angle = 135;
                  else trans_angle = 180;
                  
-                 for (int j = 0; j < 4; j ++) {
+                 if (!centered) {
                    center[0] += trans_x;
                  }
                  println('a');
@@ -119,9 +123,8 @@ void draw() {
                  else if (keys[5]) trans_angle = 45;
                  else trans_angle = 90;
         
-                 for (int j = 0; j < 4; j ++){
+                 if (!centered){
                    center[1] += trans_y;
-                   trans_lines[j][3] = trans_lines[j][1] + trans_mag;
                  }
                  println('s');
                  break;
@@ -132,11 +135,17 @@ void draw() {
                  else if (keys[4]) trans_angle = 45;
                  else trans_angle = 0;
         
-                 for (int j = 0; j < 4; j ++){
+                 if (!centered){
                    center[0] += trans_x;
                  }
                  println('d');
                  break;
+        
+        case 6:  center[0] = (la + sm) / 2;
+                 center[1] = (la + sm) / 2;
+                 
+                 if (centered) centered = false;
+                 else centered = true;
       }
       
       for (int j = 0; j < 4; j++) {
@@ -177,6 +186,20 @@ void draw() {
           }
         }
         
+        if(!keys[0] && !keys[2]) {
+          for (int k = 0; k < 4; k++) {
+            rotate_lines[k][2] = rotate_lines[k][0];
+            rotate_lines[k][3] = rotate_lines[k][1];
+          }
+        }
+        
+        if (!keys[1] && !keys[3] && !keys[4] && !keys[5]) {
+          for (int k = 0; k < 4; k++) {
+            trans_lines[k][2] = trans_lines[k][0];
+            trans_lines[k][3] = trans_lines[k][1];
+          }
+        }
+        
         res_lines[j][0] = points[j][0];
         res_lines[j][1] = points[j][1];
         
@@ -184,6 +207,7 @@ void draw() {
         res_lines[j][3] = (trans_lines[j][3] - trans_lines[j][1]) + (rotate_lines[j][3] - rotate_lines[j][1]) + res_lines[j][1];
       }
     }
+    
     if(!keys[0] && !keys[2]) {
       for (int j = 0; j < 4; j++) {
         rotate_lines[j][2] = rotate_lines[j][0];
@@ -267,6 +291,7 @@ void keyPressed() {
   if (key == 'a') keys[3] = true;
   if (key == 's') keys[4] = true;
   if (key == 'd') keys[5] = true;
+  if (key == ' ') keys[6] = true;
 }
 
 void keyReleased() {
@@ -276,4 +301,5 @@ void keyReleased() {
   if (key == 'a') keys[3] = false;
   if (key == 's') keys[4] = false;
   if (key == 'd') keys[5] = false;
+  if (key == ' ') keys[6] = false;
 }
