@@ -184,6 +184,26 @@ void draw() {
         res_lines[j][3] = (trans_lines[j][3] - trans_lines[j][1]) + (rotate_lines[j][3] - rotate_lines[j][1]) + res_lines[j][1];
       }
     }
+    if(!keys[0] && !keys[2]) {
+      for (int j = 0; j < 4; j++) {
+        rotate_lines[j][2] = rotate_lines[j][0];
+        rotate_lines[j][3] = rotate_lines[j][1];
+      }
+    }
+    
+    if (!keys[1] && !keys[3] && !keys[4] && !keys[5]) {
+      for (int j = 0; j < 4; j++) {
+        trans_lines[j][2] = trans_lines[j][0];
+        trans_lines[j][3] = trans_lines[j][1];
+      }
+    }
+    
+    if (!keys[0] && !keys[1] && !keys[2] && !keys[3] && !keys[4] && !keys[5]) {
+      for (int j = 0; j < 4; j++) {
+        res_lines[j][2] = res_lines[j][0];
+        res_lines[j][3] = res_lines[j][1];
+      }
+    }
   }
   
   //print(rotate_angle[0] + rotate_angle[2] + " ");
