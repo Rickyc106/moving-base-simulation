@@ -6,7 +6,7 @@ int la = 300;
 
 float[] center = {(sm + la) / 2, (sm + la) / 2};
 float points_angle[] = {225, 315, 135, 45};
-float[] rotate_angle = {135, 45, 315, 135};
+float[] rotate_angle = {135, 45, 45, 135};
 float half_dia = sqrt(sq(la - center[0]) + sq(la - center[1]));
 
 float trans_angle;
@@ -158,13 +158,9 @@ void draw() {
             rotate_lines[j][2] = rotate_lines[j][0] - trans_mag * cos(radians(rotate_angle[j]));    // Original
             rotate_lines[j][3] = rotate_lines[j][1] - trans_mag * sin(radians(rotate_angle[j]));
           }
-          else if (j == 0) {
+          else if (j == 0 || j == 2) {
             rotate_lines[j][2] = rotate_lines[j][0] + trans_mag * cos(radians(rotate_angle[j]));
             rotate_lines[j][3] = rotate_lines[j][1] + trans_mag * sin(radians(rotate_angle[j]));
-          }
-          else if (j == 2) {
-            rotate_lines[j][2] = rotate_lines[j][0] + trans_mag * cos(radians(rotate_angle[j]));
-            rotate_lines[j][3] = rotate_lines[j][1] - trans_mag * sin(radians(rotate_angle[j]));
           }
         }
         else {
@@ -172,20 +168,16 @@ void draw() {
             rotate_lines[j][2] = rotate_lines[j][0] + trans_mag * cos(radians(rotate_angle[j]));    // Original
             rotate_lines[j][3] = rotate_lines[j][1] + trans_mag * sin(radians(rotate_angle[j]));
           }
-          else if (j == 0) {
+          else if (j == 0 || j == 2) {
             rotate_lines[j][2] = rotate_lines[j][0] - trans_mag * cos(radians(rotate_angle[j]));
             rotate_lines[j][3] = rotate_lines[j][1] - trans_mag * sin(radians(rotate_angle[j]));
-          }
-          else if (j == 2) {
-            rotate_lines[j][2] = rotate_lines[j][0] - trans_mag * cos(radians(rotate_angle[j]));
-            rotate_lines[j][3] = rotate_lines[j][1] + trans_mag * sin(radians(rotate_angle[j]));
           }
         }
       }
     }
   }
   
-  print(rotate_angle[0] + " ");
+  print(rotate_angle[0] + rotate_angle[2] + " ");
   print(rotate_lines[0][0] + " ");
   print(rotate_lines[0][1] + " ");
   print(rotate_lines[0][2] + " ");
